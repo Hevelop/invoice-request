@@ -1,0 +1,28 @@
+{
+    "name": "hevelop/invoice-request",
+    "description": "This is the module to generate invoice request in checkout and save data in order",
+    "type": "magento2-module",
+    "authors": [
+        {
+            "name": "Samuele Martini | Hevelop srl",
+            "email": "samuele.martini@hevelop.com"
+        }
+    ],
+    "require": {
+        "magento/module-backend": "^101.0.5",
+        "magento/module-sales": "^102.0.5",
+        "magento/module-quote": "^101.1.5",
+        "magento/module-checkout": "^100.3.5"
+    },
+    "license": [
+        "OSL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Hevelop\\InvoiceRequest\\": ""
+        }
+    }
+}

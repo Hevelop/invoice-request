@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Checkout\Model\PaymentInformationManagement">
+        <plugin name="saveDataInQuoteCustomer" type="Hevelop\InvoiceRequest\Plugin\Checkout\PaymentInformationManagement" sortOrder="1"/>
+    </type>
+    <type name="Magento\Checkout\Model\GuestPaymentInformationManagement">
+        <plugin name="saveDataInQuoteGuest" type="Hevelop\InvoiceRequest\Plugin\Checkout\GuestPaymentInformationManagement" sortOrder="1"/>
+    </type>
+    <virtualType name="Magento\Sales\Model\ResourceModel\Order\Grid" type="Magento\Sales\Model\ResourceModel\Grid">
+        <arguments>
+            <argument name="columns" xsi:type="array">
+                <item name="ec_want_invoice" xsi:type="string">sales_order.ec_want_invoice</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Eav\Model\Config">
+        <arguments>
+            <argument name="attributesForPreload" xsi:type="array">
+                <item name="customer_address" xsi:type="array">
+                    <item name="sdi_code" xsi:type="string">customer_address</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+</config>
