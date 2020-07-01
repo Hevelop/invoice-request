@@ -124,7 +124,7 @@ class CheckoutLayoutProcessor
                 'id' => 'ec_fiscal_code'
             ],
             'dataScope' => 'customInvoice.ec_taxvat',
-            'label' => __('Tax/VAT number'),
+            'label' => __('Tax / VAT number'),
             'provider' => 'checkoutProvider',
             'visible' => true,
             'required' => false,
