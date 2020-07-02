@@ -116,9 +116,11 @@ define([
                 if (typeof billingAddress.vatId !== 'undefined' && billingAddress.vatId !== null && ele.hasClass('ec_vat_id'))
                     $(eleInput).val(billingAddress.vatId);
 
-                // eslint-disable-next-line max-len
-                if (typeof billingAddress.customAttributes.sdi_code !== 'undefined' && billingAddress.customAttributes.sdi_code.value !== null && ele.hasClass('ec_sdi_code'))
-                    $(eleInput).val(billingAddress.customAttributes.sdi_code.value);
+                if (typeof billingAddress.customAttributes !=="undefined") {
+                    // eslint-disable-next-line max-len
+                    if (typeof billingAddress.customAttributes.sdi_code !== 'undefined' && billingAddress.customAttributes.sdi_code.value !== null && ele.hasClass('ec_sdi_code'))
+                        $(eleInput).val(billingAddress.customAttributes.sdi_code.value);
+                }
 
                 if (window.checkoutConfig.customerData.taxvat !== null && ele.hasClass('ec_taxvat'))
                     $(eleInput).val(window.checkoutConfig.customerData.taxvat);
