@@ -6,7 +6,7 @@ define([
 ], function (Abstract, $, vatForm, quote) {
     'use strict';
 
-    let vatInputs = '.payment-method._active div.ec-vat-data-form > .field';
+    let vatInputs = '.payment-method div.ec-vat-data-form > .field';
 
     return Abstract.extend({
         initialize: function () {
@@ -56,11 +56,11 @@ define([
                 let ele = $(element),
                     eleInput = ele.find('input.input-text'),
                     eleLabel = ele.find('label'),
-                    elRadio = ele.find('#radio-private'),
-                    elRadio2 = ele.find('#radio-business');
+                    elRadio = ele.find('.radio-private'),
+                    elRadio2 = ele.find('.radio-business');
 
-                $(elRadio).prop('checked', true).attr('checked', 'checked');
-                $(elRadio2).prop('checked', false).removeAttr('checked');
+                $('.radio-private').prop('checked', true).attr('checked', 'checked');
+                $('.radio-business').prop('checked', false).removeAttr('checked');
 
                 let billingAddress = quote.billingAddress();
                 let country = billingAddress !== null ? billingAddress.countryId : 'IT';
@@ -105,11 +105,11 @@ define([
                 let ele = $(element),
                     eleInput = ele.find('input.input-text'),
                     eleLabel = ele.find('label'),
-                    elRadio = ele.find('#radio-business'),
-                    elRadio2 = ele.find('#radio-private');
+                    elRadio = ele.find('.radio-business'),
+                    elRadio2 = ele.find('.radio-private');
 
-                $(elRadio).prop('checked', true).attr('checked', 'checked');
-                $(elRadio2).prop('checked', false).removeAttr('checked');
+                $('.radio-business').prop('checked', true).attr('checked', 'checked');
+                $('.radio-private').prop('checked', false).removeAttr('checked');
 
                 let billingAddress = quote.billingAddress();
                 let country = billingAddress !== null ? billingAddress.countryId : 'IT';
