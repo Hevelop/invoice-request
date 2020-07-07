@@ -7,4 +7,7 @@
         <attribute code="ec_taxvat" type="string"/>
         <attribute code="ec_sdi_code" type="string"/>
 	</extension_attributes>
+    <extension_attributes for="Magento\Sales\Api\Data\OrderAddressInterface">
+        <attribute code="sdi_code" type="string"/>
+    </extension_attributes>
 </config>

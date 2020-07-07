@@ -22,4 +22,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Sales\Api\Data\OrderInterface">
+        <plugin name="SetSdiInAPi" type="Hevelop\InvoiceRequest\Plugin\SetSdiInAPi" sortOrder="999"/>
+    </type>
 </config>
