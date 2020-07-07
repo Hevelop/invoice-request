@@ -62,6 +62,9 @@ define([
                 $(elRadio).prop('checked', true).attr('checked', 'checked');
                 $(elRadio2).prop('checked', false).removeAttr('checked');
 
+                let billingAddress = quote.billingAddress();
+                let country = billingAddress !== null ? billingAddress.countryId : 'IT';
+
                 if (window.checkoutConfig.customerData.taxvat !== null && ele.hasClass('ec_taxvat'))
                     $(eleInput).val(window.checkoutConfig.customerData.taxvat);
 
@@ -80,7 +83,7 @@ define([
 
                 if (ele.hasClass('ec_company') || ele.hasClass('ec_vat_id') || ele.hasClass('ec_sdi_code')) {
                     $(eleInput).prop('required', false);
-                    $(eleInput).removeClass('ec-required');
+                    $(eleInput).removeClass('ec-required ec-sdi-validation ec-ita-vat-validation');
                     $(eleInput).addClass('ec-not-required');
                     ele.fadeOut('fast');
                     $(eleLabel).find('sup').remove();
@@ -90,6 +93,9 @@ define([
                     $(eleInput).prop('required', true);
                     $(eleLabel).find('sup').remove();
                     $(eleLabel).append('<sup>*</sup>');
+
+                    if (country === 'IT')
+                        $(eleInput).addClass('ec-ita-cf-validation');
                 }
             });
         },
@@ -116,7 +122,7 @@ define([
                 if (typeof billingAddress.vatId !== 'undefined' && billingAddress.vatId !== null && ele.hasClass('ec_vat_id'))
                     $(eleInput).val(billingAddress.vatId);
 
-                if (typeof billingAddress.customAttributes !=="undefined") {
+                if (typeof billingAddress.customAttributes !== "undefined") {
                     // eslint-disable-next-line max-len
                     if (typeof billingAddress.customAttributes.sdi_code !== 'undefined' && billingAddress.customAttributes.sdi_code.value !== null && ele.hasClass('ec_sdi_code'))
                         $(eleInput).val(billingAddress.customAttributes.sdi_code.value);
@@ -137,9 +143,15 @@ define([
                     ele.fadeIn('fast');
                     $(eleLabel).find('sup').remove();
                     $(eleLabel).append('<sup>*</sup>');
+
+                    if (ele.hasClass('ec_sdi_code'))
+                        $(eleInput).addClass('ec-sdi-validation');
+
+                    if (country === 'IT' && ele.hasClass('ec_vat_id'))
+                        $(eleInput).addClass('ec-ita-vat-validation');
                 } else if (ele.hasClass('ec_taxvat')) {
                     $(eleInput).prop('required', false);
-                    $(eleInput).removeClass('ec-required');
+                    $(eleInput).removeClass('ec-required ec-ita-cf-validation');
                     $(eleInput).addClass('ec-not-required');
                     $(eleLabel).find('sup').remove();
                 }
