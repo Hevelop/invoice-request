@@ -113,24 +113,32 @@ define([
                     } else if ($(element).hasClass('ec-ita-vat-validation')) {
                         vatValid = validationInvoicingFields.validateVatIta(value);
 
-                        if (!vatValid)
+                        if (vatValid) {
+                            window.checkoutConfig.invoiceData.ec_vat_id = $('[name="customInvoice[ec_vat_id]"]').val();
+                        } else {
                             validationInvoicingFields.generateError(element, ecErrorMessageFormat);
-
+                        }
                     } else if ($(element).hasClass('ec-ita-cf-validation')) {
                         cfValid = validationInvoicingFields.validateCf(value);
 
-                        if (!cfValid)
+                        if (cfValid) {
+                            window.checkoutConfig.invoiceData.ec_taxvat = $('[name="customInvoice[ec_taxvat]"]').val();
+                        } else {
                             validationInvoicingFields.generateError(element, ecErrorMessageFormat);
-
+                        }
                     } else if ($(element).hasClass('ec-sdi-validation')) {
                         sdiValid = validationInvoicingFields.validateSdi(value);
 
-                        if (!sdiValid)
+                        if (sdiValid) {
+                            window.checkoutConfig.invoiceData.ec_sdi_code = $('[name="customInvoice[ec_sdi_code]"]').val();
+                        } else {
                             validationInvoicingFields.generateError(element, ecErrorMessageFormat);
+                        }
                     } else {
                         $(element).removeClass('ec-invalid-input');
                         $(element).attr('aria-invalid', 'false');
                         $(element).siblings('.ec-error').remove();
+
                         if ($(element).attr('name') === 'customInvoice[ec_company]')
                             // eslint-disable-next-line max-len
                             window.checkoutConfig.invoiceData.ec_company = $('[name="customInvoice[ec_company]"]').val();
