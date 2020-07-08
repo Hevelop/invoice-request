@@ -96,8 +96,6 @@ define([
                         $(eleInput).addClass('ec-ita-cf-validation');
                 }
             });
-
-            window.checkoutConfig.invoiceData.ec_invoice_type = "private";
         },
 
         setBusinessInputs: function () {
@@ -154,8 +152,6 @@ define([
                     $(eleLabel).find('sup').remove();
                 }
             });
-
-            window.checkoutConfig.invoiceData.ec_invoice_type = "company";
         }
     });
 });

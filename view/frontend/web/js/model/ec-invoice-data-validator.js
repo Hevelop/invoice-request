@@ -96,7 +96,8 @@ define([
                     ec_company: '',
                     ec_vat_id: '',
                     ec_taxvat: '',
-                    ec_sdi_code: ''
+                    ec_sdi_code: '',
+                    ec_invoice_type: ''
                 };
 
                 $(vatInputs).each(function (index, element) {
@@ -151,6 +152,12 @@ define([
                             window.checkoutConfig.invoiceData.ec_sdi_code = $('[name="customInvoice[ec_sdi_code]"]').val();
                     }
                 });
+
+                if ($('.radio-private').is(':checked')) {
+                    window.checkoutConfig.invoiceData.ec_invoice_type = "private";
+                } else if ($('.radio-business').is(':checked')) {
+                    window.checkoutConfig.invoiceData.ec_invoice_type = "company";
+                }
             }
 
             return (requiredValid && vatValid && cfValid && sdiValid);
