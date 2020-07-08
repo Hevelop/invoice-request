@@ -4,7 +4,7 @@ namespace Hevelop\InvoiceRequest\Model\Source;
 
 use Magento\Framework\Data\OptionSourceInterface;
 
-class Ecwantinvoicefilter implements OptionSourceInterface
+class EcInvoiceTypeFilter implements OptionSourceInterface
 {
     /**
      * @return array
@@ -13,10 +13,10 @@ class Ecwantinvoicefilter implements OptionSourceInterface
     {
         return [
             [
-                'value' => "1", 'label' => __('Yes')
+                'value' => "company", 'label' => __('Company')
             ],
             [
-                'value' => "0", 'label' => __('No')
+                'value' => "private", 'label' => __('Private')
             ]
         ];
     }

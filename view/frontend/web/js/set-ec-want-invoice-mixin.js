@@ -37,6 +37,13 @@ define([
                         // eslint-disable-next-line max-len
                         billingAddress['extensionAttributes']['ec_sdi_code'] = window.checkoutConfig.invoiceData.ec_sdi_code;
                     }
+
+                    if (window.checkoutConfig.invoiceData.ec_invoice_type !== '') {
+                        // eslint-disable-next-line max-len
+                        billingAddress['extensionAttributes']['ec_invoice_type'] = window.checkoutConfig.invoiceData.ec_invoice_type;
+                    }
+                } else {
+                    billingAddress['extensionAttributes'].splice('ec_invoice_type', 1);
                 }
 
                 return originalAction();

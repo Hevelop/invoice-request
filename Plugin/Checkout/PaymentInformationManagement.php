@@ -45,21 +45,17 @@ class PaymentInformationManagement
             $quote->setEcWantInvoice($extAttributes->getEcWantInvoice());
 
             if ($extAttributes->getEcWantInvoice() == "1") {
-                if ($extAttributes->getEcCompany() != "") {
-                    $quote->setEcCompany($extAttributes->getEcCompany());
-                }
-
-                if ($extAttributes->getEcVatId() != "") {
-                    $quote->setEcVatId($extAttributes->getEcVatId());
-                }
-
-                if ($extAttributes->getEcTaxvat() != "") {
-                    $quote->setEcTaxvat($extAttributes->getEcTaxvat());
-                }
-
-                if ($extAttributes->getEcSdiCode() != "") {
-                    $quote->setSdiCode($extAttributes->getEcSdiCode());
-                }
+                $quote->setEcInvoiceType($extAttributes->getEcInvoiceType());
+                $quote->setEcCompany($extAttributes->getEcCompany());
+                $quote->setEcVatId($extAttributes->getEcVatId());
+                $quote->setEcTaxvat($extAttributes->getEcTaxvat());
+                $quote->setSdiCode($extAttributes->getEcSdiCode());
+            } else {
+                $quote->setEcInvoiceType("");
+                $quote->setEcCompany("");
+                $quote->setEcVatId("");
+                $quote->setEcTaxvat("");
+                $quote->setSdiCode("");
             }
         }
     }

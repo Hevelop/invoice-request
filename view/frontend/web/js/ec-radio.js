@@ -55,9 +55,7 @@ define([
             $(vatInputs).each(function (index, element) {
                 let ele = $(element),
                     eleInput = ele.find('input.input-text'),
-                    eleLabel = ele.find('label'),
-                    elRadio = ele.find('.radio-private'),
-                    elRadio2 = ele.find('.radio-business');
+                    eleLabel = ele.find('label');
 
                 $('.radio-private').prop('checked', true).attr('checked', 'checked');
                 $('.radio-business').prop('checked', false).removeAttr('checked');
@@ -98,15 +96,15 @@ define([
                         $(eleInput).addClass('ec-ita-cf-validation');
                 }
             });
+
+            window.checkoutConfig.invoiceData.ec_invoice_type = "private";
         },
 
         setBusinessInputs: function () {
             $(vatInputs).each(function (index, element) {
                 let ele = $(element),
                     eleInput = ele.find('input.input-text'),
-                    eleLabel = ele.find('label'),
-                    elRadio = ele.find('.radio-business'),
-                    elRadio2 = ele.find('.radio-private');
+                    eleLabel = ele.find('label');
 
                 $('.radio-business').prop('checked', true).attr('checked', 'checked');
                 $('.radio-private').prop('checked', false).removeAttr('checked');
@@ -156,6 +154,8 @@ define([
                     $(eleLabel).find('sup').remove();
                 }
             });
+
+            window.checkoutConfig.invoiceData.ec_invoice_type = "company";
         }
     });
 });

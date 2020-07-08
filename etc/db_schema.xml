@@ -5,9 +5,11 @@
     </table>
     <table name="sales_order">
         <column xsi:type="smallint" name="ec_want_invoice" nullable="false" comment="Want Invoice"/>
+        <column xsi:type="varchar" name="ec_invoice_type" nullable="false" comment="Invoice Type"/>
     </table>
     <table name="sales_order_grid">
         <column xsi:type="smallint" name="ec_want_invoice" nullable="false" comment="Want Invoice"/>
+        <column xsi:type="varchar" name="ec_invoice_type" nullable="false" comment="Invoice Type"/>
     </table>
     <table name="quote_address">
         <column xsi:type="varchar" name="sdi_code" comment="Codice destinatario (SDI)"/>

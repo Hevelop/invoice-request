@@ -6,10 +6,18 @@
     <type name="Magento\Checkout\Model\GuestPaymentInformationManagement">
         <plugin name="saveDataInQuoteGuest" type="Hevelop\InvoiceRequest\Plugin\Checkout\GuestPaymentInformationManagement" sortOrder="1"/>
     </type>
+    <type name="Magento\Sales\Api\Data\OrderInterface">
+        <plugin name="setSdiInAPi" type="Hevelop\InvoiceRequest\Plugin\SetSdiInAPi" sortOrder="999"/>
+    </type>
+    <type name="Magento\Sales\Api\OrderRepositoryInterface">
+        <plugin name="setWantInvoiceInAPi" type="Hevelop\InvoiceRequest\Plugin\SetWantInvoiceInAPi" sortOrder="999"/>
+    </type>
+
     <virtualType name="Magento\Sales\Model\ResourceModel\Order\Grid" type="Magento\Sales\Model\ResourceModel\Grid">
         <arguments>
             <argument name="columns" xsi:type="array">
                 <item name="ec_want_invoice" xsi:type="string">sales_order.ec_want_invoice</item>
+                <item name="ec_invoice_type" xsi:type="string">sales_order.ec_invoice_type</item>
             </argument>
         </arguments>
     </virtualType>
@@ -21,8 +29,5 @@
                 </item>
             </argument>
         </arguments>
-    </type>
-    <type name="Magento\Sales\Api\Data\OrderInterface">
-        <plugin name="SetSdiInAPi" type="Hevelop\InvoiceRequest\Plugin\SetSdiInAPi" sortOrder="999"/>
     </type>
 </config>

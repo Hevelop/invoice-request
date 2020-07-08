@@ -39,27 +39,19 @@ class SaveDataToOrderObserver implements ObserverInterface
         $order->setEcWantInvoice($quote->getEcWantInvoice());
 
         if ($quote->getEcWantInvoice() == "1") {
+            $order->setEcInvoiceType($quote->getEcInvoiceType());
+
             $addresses = $order->getAddresses();
 
             foreach ($addresses as $address) {
                 if ($address->getAddressType() == 'billing') {
-                    if ($quote->getEcCompany() != "") {
-                        $address->setCompany($quote->getEcCompany());
-                    }
-
-                    if ($quote->getEcVatId() != "") {
-                        $address->setVatId($quote->getEcVatId());
-                    }
-
-                    if ($quote->getSdiCode() != "") {
-                        $address->setSdiCode($quote->getSdiCode());
-                    }
+                    $address->setCompany($quote->getEcCompany());
+                    $address->setVatId($quote->getEcVatId());
+                    $address->setSdiCode($quote->getSdiCode());
                 }
             }
 
-            if ($quote->getEcTaxvat() != "") {
-                $order->setCustomerTaxvat($quote->getEcTaxvat());
-            }
+            $order->setCustomerTaxvat($quote->getEcTaxvat());
         }
 
         return $this;

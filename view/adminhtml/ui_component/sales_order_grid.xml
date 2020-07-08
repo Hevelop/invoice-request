@@ -3,7 +3,22 @@
 	<columns name="sales_order_columns">
 		<column name="ec_want_invoice">
 			<argument name="data" xsi:type="array">
-				<item name="options" xsi:type="object">Hevelop\InvoiceRequest\Model\Source\Ecwantinvoicefilter</item>
+				<item name="options" xsi:type="object">Hevelop\InvoiceRequest\Model\Source\EcWantInvoiceFilter</item>
+				<item name="config" xsi:type="array">
+					<item name="filter" xsi:type="string">select</item>
+					<item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
+					<item name="sortable" xsi:type="boolean">true</item>
+					<item name="dataType" xsi:type="string">select</item>
+					<item name="sortOrder" xsi:type="number">40</item>
+					<item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+					<item name="editor" xsi:type="string">select</item>
+					<item name="label" xsi:type="string" translate="true">Want Invoice</item>
+				</item>
+			</argument>
+		</column>
+		<column name="ec_invoice_type">
+			<argument name="data" xsi:type="array">
+				<item name="options" xsi:type="object">Hevelop\InvoiceRequest\Model\Source\EcInvoiceTypeFilter</item>
 				<item name="config" xsi:type="array">
 					<item name="filter" xsi:type="string">select</item>
 					<item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
