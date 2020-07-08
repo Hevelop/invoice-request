@@ -27,7 +27,7 @@
 					<item name="sortOrder" xsi:type="number">40</item>
 					<item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
 					<item name="editor" xsi:type="string">select</item>
-					<item name="label" xsi:type="string" translate="true">Want Invoice</item>
+					<item name="label" xsi:type="string" translate="true">Invoice Type</item>
 				</item>
 			</argument>
 		</column>
