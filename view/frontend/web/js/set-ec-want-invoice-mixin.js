@@ -42,7 +42,8 @@ define([
                         // eslint-disable-next-line max-len
                         billingAddress['extensionAttributes']['ec_invoice_type'] = window.checkoutConfig.invoiceData.ec_invoice_type;
                     }
-                } else {
+                    // eslint-disable-next-line max-len
+                } else if (billingAddress['extensionAttributes'] && billingAddress['extensionAttributes']['ec_invoice_type']) {
                     billingAddress['extensionAttributes'].splice('ec_invoice_type', 1);
                 }
 
