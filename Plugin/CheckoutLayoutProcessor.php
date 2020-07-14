@@ -66,12 +66,10 @@ class CheckoutLayoutProcessor
         ];
 
         $jsLayout['components']['checkout']['children']['steps']['children']['billing-step']['children']['payment']['children']['payments-list']['children']['before-place-order']['children']['ec-vat-data-form']['children']['ec_company'] = [
-            'component' => 'Magento_Ui/js/form/element/abstract',
+            'component' => 'Hevelop_InvoiceRequest/js/ec-input',
             'displayArea' => 'ec-vat-data-form',
             'config' => [
                 'customScope' => 'customInvoice',
-                'template' => 'ui/form/field',
-                'elementTmpl' => 'ui/form/element/input',
                 'options' => [],
                 'id' => 'ec_company_name'
             ],
@@ -90,12 +88,10 @@ class CheckoutLayoutProcessor
         ];
 
         $jsLayout['components']['checkout']['children']['steps']['children']['billing-step']['children']['payment']['children']['payments-list']['children']['before-place-order']['children']['ec-vat-data-form']['children']['ec_vat_id'] = [
-            'component' => 'Magento_Ui/js/form/element/abstract',
+            'component' => 'Hevelop_InvoiceRequest/js/ec-input',
             'displayArea' => 'ec-vat-data-form',
             'config' => [
                 'customScope' => 'customInvoice',
-                'template' => 'ui/form/field',
-                'elementTmpl' => 'ui/form/element/input',
                 'options' => [],
                 'id' => 'ec_vat_id'
             ],
@@ -114,12 +110,10 @@ class CheckoutLayoutProcessor
         ];
 
         $jsLayout['components']['checkout']['children']['steps']['children']['billing-step']['children']['payment']['children']['payments-list']['children']['before-place-order']['children']['ec-vat-data-form']['children']['ec_taxvat'] = [
-            'component' => 'Magento_Ui/js/form/element/abstract',
+            'component' => 'Hevelop_InvoiceRequest/js/ec-input',
             'displayArea' => 'ec-vat-data-form',
             'config' => [
                 'customScope' => 'customInvoice',
-                'template' => 'ui/form/field',
-                'elementTmpl' => 'ui/form/element/input',
                 'options' => [],
                 'id' => 'ec_fiscal_code'
             ],
@@ -138,12 +132,10 @@ class CheckoutLayoutProcessor
         ];
 
         $jsLayout['components']['checkout']['children']['steps']['children']['billing-step']['children']['payment']['children']['payments-list']['children']['before-place-order']['children']['ec-vat-data-form']['children']['ec_sdi_code'] = [
-            'component' => 'Magento_Ui/js/form/element/abstract',
+            'component' => 'Hevelop_InvoiceRequest/js/ec-input',
             'displayArea' => 'ec-vat-data-form',
             'config' => [
                 'customScope' => 'customInvoice',
-                'template' => 'ui/form/field',
-                'elementTmpl' => 'ui/form/element/input',
                 'options' => [],
                 'id' => 'ec_sdi_code'
             ],
