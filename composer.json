@@ -15,7 +15,7 @@
         "magento/module-checkout": "^100.3.5"
     },
     "license": [
-        "OSL-3.0"
+        "AGPL-3.0"
     ],
     "autoload": {
         "files": [

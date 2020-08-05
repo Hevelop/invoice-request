@@ -1,4 +1,10 @@
 <?xml version="1.0"?>
+<!--
+  ~ Copyright (c) 2020 Hevelop srl (https://hevelop.com). All rights reserved.
+  ~ License: https://opensource.org/licenses/agpl-3.0  AGPL-3.0 License
+  ~ Author: Samuele Martini <samuele.martini@hevelop.com>
+  ~ Package: Hevelop_InvoiceRequest
+  -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <update handle="customer_account"/>
     <body>

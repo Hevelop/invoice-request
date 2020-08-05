@@ -1,4 +1,10 @@
 <?xml version="1.0"?>
+<!--
+  ~ Copyright (c) 2020 Hevelop srl (https://hevelop.com). All rights reserved.
+  ~ License: https://opensource.org/licenses/agpl-3.0  AGPL-3.0 License
+  ~ Author: Samuele Martini <samuele.martini@hevelop.com>
+  ~ Package: Hevelop_InvoiceRequest
+  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\Checkout\Model\PaymentInformationManagement">
         <plugin name="saveDataInQuoteCustomer" type="Hevelop\InvoiceRequest\Plugin\Checkout\PaymentInformationManagement" sortOrder="1"/>
