@@ -1,4 +1,26 @@
 ## Checkout invoice request for italian invoicing
+### Installation
+- Composer:
+```
+composer require hevelop/invoice-request
+```
+- Downloading module:
+```
+Download module from GitHub and copy/paste it under dir your_magento_root/app/code/Hevelop/InvoiceRequest
+```
+
+After installation, enable the module
+```
+bin/magento module:enable Hevelop_InvoiceRequest
+```
+upgrade your database:
+```
+bin/magento setup:upgrade
+```
+and compile the Magento dependency injection:
+```
+bin/magento setup:di:compile
+```
 
 ### Checkout
 A new section is added to checkout in the payment step.
