@@ -8,6 +8,7 @@
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="quote">
         <column xsi:type="smallint" name="ec_want_invoice" nullable="false" comment="Want Invoice"/>
+        <column xsi:type="varchar" name="ec_invoice_type" nullable="false" comment="Invoice Type"/>
     </table>
     <table name="sales_order">
         <column xsi:type="smallint" name="ec_want_invoice" nullable="false" comment="Want Invoice"/>

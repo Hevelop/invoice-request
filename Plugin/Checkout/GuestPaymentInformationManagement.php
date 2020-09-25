@@ -65,16 +65,16 @@ class GuestPaymentInformationManagement
 
             if ($extAttributes->getEcWantInvoice() == "1") {
                 $quote->setEcInvoiceType($extAttributes->getEcInvoiceType());
-                $quote->setEcCompany($extAttributes->getEcCompany());
-                $quote->setEcVatId($extAttributes->getEcVatId());
-                $quote->setEcTaxvat($extAttributes->getEcTaxvat());
-                $quote->setSdiCode($extAttributes->getEcSdiCode());
+                $billingAddress->setCompany($extAttributes->getEcCompany());
+                $billingAddress->setVatId($extAttributes->getEcVatId());
+                $billingAddress->setSdiCode($extAttributes->getEcSdiCode());
+                $quote->setCustomerTaxvat($extAttributes->getEcTaxvat());
             } else {
                 $quote->setEcInvoiceType("");
-                $quote->setEcCompany("");
-                $quote->setEcVatId("");
-                $quote->setEcTaxvat("");
-                $quote->setSdiCode("");
+                $billingAddress->setCompany("");
+                $billingAddress->setVatId("");
+                $billingAddress->setSdiCode("");
+                $quote->setCustomerTaxvat("");
             }
         }
     }
