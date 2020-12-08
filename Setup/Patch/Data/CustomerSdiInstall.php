@@ -9,12 +9,23 @@
 
 namespace Hevelop\InvoiceRequest\Setup\Patch\Data;
 
+use Magento\Customer\Api\AddressMetadataManagementInterface;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Setup\EavSetupFactory;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
+use Webformat\FatturazioneElettronica\Setup\Patch\Data\CustomerAddressAttribute;
 
+/**
+ * Class CustomerSdiInstall
+ *
+ * @package Hevelop\InvoiceRequest\Setup\Patch\Data
+ */
 class CustomerSdiInstall implements DataPatchInterface
 {
+    // Customer Address 'sdi_code' Attribute
+    const SDI_CODE = 'sdi_code';
+
     /**
      * @var Config
      */
@@ -26,59 +37,87 @@ class CustomerSdiInstall implements DataPatchInterface
     protected $eavSetupFactory;
 
     /**
+     * @var AttributeSetFactory
+     */
+    protected $attributeSetFactory;
+
+    /**
      * AddressAttribute constructor.
+     *
      * @param Config $eavConfig
      * @param EavSetupFactory $eavSetupFactory
+     * @param AttributeSetFactory $attributeSetFactory
      */
     public function __construct(
         Config $eavConfig,
-        EavSetupFactory $eavSetupFactory
+        EavSetupFactory $eavSetupFactory,
+        AttributeSetFactory $attributeSetFactory
     ) {
         $this->eavConfig = $eavConfig;
         $this->eavSetupFactory = $eavSetupFactory;
+        $this->attributeSetFactory = $attributeSetFactory;
     }
 
     /**
-     * @return DataPatchInterface|void
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\StateException
-     * @throws \Zend_Validate_Exception
+     * @return void|CustomerAddressAttribute
+     * @throws LocalizedException
+     * @throws Zend_Validate_Exception
      */
     public function apply()
     {
         $eavSetup = $this->eavSetupFactory->create();
 
-        $eavSetup->removeAttribute('customer_address', 'sdi_code');
-        $eavSetup->addAttribute('customer_address', 'sdi_code', [
-            'label' => 'Codice destinatario (SDI)',
-            'system' => 0,
-            'user_defined' => false,
-            'position' => 100,
-            'sort_order' => 100,
-            'visible' => true,
-            'default_value' => '',
-            'note' => '',
-            'type' => 'varchar',
-            'input' => 'text',
-            'required' => false
-        ]);
+        // getting Attribute Set & Group Id
+        $customerAddressEntity =
+            $this->eavConfig->getEntityType(AddressMetadataManagementInterface::ENTITY_TYPE_ADDRESS);
+        $attributeSetId = $customerAddressEntity->getDefaultAttributeSetId();
+        $attributeSet = $this->attributeSetFactory->create();
+        $attributeGroupId = $attributeSet->getDefaultGroupId($attributeSetId);
 
-        $customAttribute = $this->eavConfig->getAttribute('customer_address', 'sdi_code');
-
-        $customAttribute->setData(
-            'used_in_forms',
+        $eavSetup->removeAttribute(
+            AddressMetadataManagementInterface::ENTITY_TYPE_ADDRESS,
+            self::SDI_CODE
+        );
+        $eavSetup->addAttribute(
+            AddressMetadataManagementInterface::ENTITY_TYPE_ADDRESS,
+            self::SDI_CODE,
             [
+                'label' => 'Codice destinatario (SDI)',
+                'system' => 0,
+                'user_defined' => false,
+                'position' => 100,
+                'sort_order' => 100,
+                'visible' => true,
+                'default_value' => '',
+                'note' => '',
+                'type' => 'varchar',
+                'input' => 'text',
+                'required' => false
+            ]
+        );
+
+        // getting attribute
+        $customAttribute = $this->eavConfig->getAttribute(
+            AddressMetadataManagementInterface::ENTITY_TYPE_ADDRESS,
+            self::SDI_CODE
+        );
+
+        // declaring attribute Set & Group and putting attribute in the forms
+        $customAttribute->addData([
+            'attribute_set_id' => $attributeSetId,
+            'attribute_group_id' => $attributeGroupId,
+            'used_in_forms' => [
                 'adminhtml_customer_address',
                 'customer_address_edit',
                 'customer_register_address'
             ]
-        );
+        ]);
 
         $customAttribute->save();
     }
 
     /**
-     * @return array|string[]
+     * @return array
      */
     public static function getDependencies()
     {
@@ -86,7 +125,7 @@ class CustomerSdiInstall implements DataPatchInterface
     }
 
     /**
-     * @return array|string[]
+     * @return array
      */
     public function getAliases()
     {
