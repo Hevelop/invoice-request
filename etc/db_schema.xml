@@ -24,7 +24,4 @@
     <table name="sales_order_address">
         <column xsi:type="varchar" name="sdi_code" comment="Codice destinatario (SDI)"/>
     </table>
-    <table name="customer_address_entity">
-        <column xsi:type="varchar" name="sdi_code" comment="Codice destinatario (SDI)"/>
-    </table>
 </schema>
