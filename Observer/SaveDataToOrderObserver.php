@@ -59,7 +59,7 @@ class SaveDataToOrderObserver implements ObserverInterface
                 }
             }
 
-            $order->setCustomerTaxvat($quote->getCustomerTaxvat());
+            $order->setCustomerTaxvat($billingAddress->getExtensionAttributes()->getEcTaxvat());
         }
 
         return $this;
