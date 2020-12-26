@@ -4,7 +4,7 @@
   ~ Author: Samuele Martini <samuele.martini@hevelop.com>
   ~ Package: Hevelop_InvoiceRequest
   -->
-<div class="field" data-bind="visible: visible, attr: {'name': element.dataScope}, css: additionalClasses">
+<div class="field" data-bind="visible: visible, attr: {'name': element.dataScope}, css: {_required: required, additionalClasses}">
 
     <label class="label" data-bind="attr: { for: element.getElementId($parentContext) }">
         <!-- ko if: element.label -->

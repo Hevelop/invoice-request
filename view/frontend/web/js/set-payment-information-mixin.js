@@ -14,7 +14,6 @@ define([
     return function (setPaymentInformationAction) {
         return wrapper.wrap(setPaymentInformationAction, function (originalAction) {
             saveBillingAction();
-
             return originalAction();
         });
     };

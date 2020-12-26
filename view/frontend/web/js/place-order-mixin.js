@@ -14,7 +14,6 @@ define([
     return function (placeOrderAction) {
         return wrapper.wrap(placeOrderAction, function (originalAction) {
             saveBillingAction();
-
             return originalAction();
         });
     };
