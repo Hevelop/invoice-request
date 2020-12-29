@@ -7,26 +7,26 @@
  */
 define([
     'jquery',
+    'uiRegistry',
+    'mageUtils',
+    'Magento_Ui/js/lib/validation/validator',
     'mage/validation',
     'mage/translate'
-], function ($) {
+], function ($, registry, utils, validator, validation, $t) {
     'use strict';
 
-    let vatInputs = '.payment-method._active div.ec-vat-data-form input',
-        ecErrorMessageRequired = $.mage.__('This is a required field.'),
-        ecErrorMessageFormat = $.mage.__('The format of this field is not valid.'),
-        openErr = '<div class="mage-error ec-error field-error">',
-        closeErr = '</div>';
+    let vatFormListComponent = registry.get('checkout.steps.billing-step.payment.payments-list.before-place-order.ec-vat-data-form');
 
-    let validationInvoicingFields = {
-        validateVatIta: function (value) {
+    validator.addRule(
+        'validateVatIta',
+        function (value) {
             let i;
             let j;
             let s = 0;
             let c = 0;
 
             if (value.length <= 0)
-                return false;
+                return true;
 
             let piReg = /\d{11}/;
             if (!piReg.test(value))
@@ -45,18 +45,26 @@ define([
             }
 
             return (10 - s % 10) % 10 === value.charCodeAt(10) - '0'.charCodeAt(0);
-        },
+        }
+        , $t('The format of this field is not valid')
+    );
 
-        validateCf: function (value) {
+    validator.addRule(
+        'validateCf',
+        function (value) {
             let cfReg = /^[A-Z]{6}\d{2}[A-Z]\d{2}[A-Z]\d{3}[A-Z]$/;
             let i;
             let j;
             let s = 0;
 
+            if (value.length <= 0)
+                return true;
+
             value = value.toUpperCase();
 
-            if (!cfReg.test(value))
+            if (!cfReg.test(value)) {
                 return false;
+            }
 
             let set1 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             let set2 = "ABCDEFGHIJABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -72,19 +80,20 @@ define([
             }
 
             return s % 26 === value.charCodeAt(15) - 'A'.charCodeAt(0);
-        },
-
-        validateSdi: function (value) {
-            let sdiReg = /^[a-zA-Z0-9]{7,}$/;
-
-            return sdiReg.test(value);
-        },
-
-        generateError: function (element, message) {
-            $(element).siblings('.ec-error').remove();
-            $(element).after(openErr + message + closeErr);
         }
-    };
+        , $t('The format of this field is not valid')
+    );
+
+    validator.addRule(
+        'validateSdi',
+        function (value) {
+            if (value.length <= 0)
+                return true;
+            let sdiReg = /^[a-zA-Z0-9]{7,}$/;
+            return sdiReg.test(value);
+        }
+        , $t('The format of this field is not valid')
+    );
 
     return {
 
@@ -92,14 +101,17 @@ define([
          * @returns {Boolean}
          */
         validate: function () {
-            let requiredValid = true;
-            let vatValid = true;
-            let cfValid = true;
-            let sdiValid = true;
+            let isValid = true;
 
-            if (window.checkoutConfig.quoteData.ec_want_invoice === 1) {
+            let checkoutProvider = registry.get('checkoutProvider');
+            let invoiceRequest = checkoutProvider.invoiceRequest;
+            let ecInvoiceType = 'private';
 
-                window.checkoutConfig.invoiceData = {
+            if (typeof invoiceRequest !== 'undefined' && invoiceRequest.ec_want_invoice === 1) {
+
+                let checkout = registry.get('checkout');
+                let invoiceData = {
+                    ec_want_invoice: invoiceRequest.ec_want_invoice,
                     ec_company: '',
                     ec_vat_id: '',
                     ec_taxvat: '',
@@ -107,67 +119,34 @@ define([
                     ec_invoice_type: ''
                 };
 
-                $(vatInputs).each(function (index, element) {
-                    let value = $(element).val();
-                    $(element).siblings('.ec-error').remove();
-
-                    if ($(element).hasClass('ec-required') && $(element).val() === '') {
-                        $(element).addClass('ec-invalid-input');
-                        $(element).attr('aria-invalid', 'true');
-
-                        validationInvoicingFields.generateError(element, ecErrorMessageRequired);
-
-                        requiredValid = false;
-                    } else if ($(element).hasClass('ec-ita-vat-validation')) {
-                        vatValid = validationInvoicingFields.validateVatIta(value);
-
-                        if (vatValid) {
-                            window.checkoutConfig.invoiceData.ec_vat_id = $('[name="customInvoice[ec_vat_id]"]').val();
-                        } else {
-                            validationInvoicingFields.generateError(element, ecErrorMessageFormat);
-                        }
-                    } else if ($(element).hasClass('ec-ita-cf-validation')) {
-                        cfValid = validationInvoicingFields.validateCf(value);
-
-                        if (cfValid) {
-                            window.checkoutConfig.invoiceData.ec_taxvat = $('[name="customInvoice[ec_taxvat]"]').val();
-                        } else {
-                            validationInvoicingFields.generateError(element, ecErrorMessageFormat);
-                        }
-                    } else if ($(element).hasClass('ec-sdi-validation')) {
-                        sdiValid = validationInvoicingFields.validateSdi(value);
-
-                        if (sdiValid) {
-                            window.checkoutConfig.invoiceData.ec_sdi_code = $('[name="customInvoice[ec_sdi_code]"]').val();
-                        } else {
-                            validationInvoicingFields.generateError(element, ecErrorMessageFormat);
+                let vatFormFields = vatFormListComponent.childrenInputs;
+                vatFormFields.forEach(function (index) {
+                    let component = vatFormListComponent.getChild(index);
+                    if (component.required() || component.value() !== '') {
+                        let validationResult = component.validate();
+                        if (validationResult.valid === false) {
+                            isValid = false;
                         }
                     } else {
-                        $(element).removeClass('ec-invalid-input');
-                        $(element).attr('aria-invalid', 'false');
-                        $(element).siblings('.ec-error').remove();
-
-                        if ($(element).attr('name') === 'customInvoice[ec_company]')
-                            // eslint-disable-next-line max-len
-                            window.checkoutConfig.invoiceData.ec_company = $('[name="customInvoice[ec_company]"]').val();
-                        if ($(element).attr('name') === 'customInvoice[ec_vat_id]')
-                            window.checkoutConfig.invoiceData.ec_vat_id = $('[name="customInvoice[ec_vat_id]"]').val();
-                        if ($(element).attr('name') === 'customInvoice[ec_taxvat]')
-                            window.checkoutConfig.invoiceData.ec_taxvat = $('[name="customInvoice[ec_taxvat]"]').val();
-                        if ($(element).attr('name') === 'customInvoice[ec_sdi_code]')
-                            // eslint-disable-next-line max-len
-                            window.checkoutConfig.invoiceData.ec_sdi_code = $('[name="customInvoice[ec_sdi_code]"]').val();
+                        if (component.error() !== '') {
+                            component.error('');
+                        }
                     }
+                    if (index === 'ec_invoice_type') {
+                        ecInvoiceType = component.radioCheckValue();
+                    }
+                    invoiceData[index] = component.value();
                 });
 
-                if ($('.radio-private').is(':checked')) {
-                    window.checkoutConfig.invoiceData.ec_invoice_type = "private";
-                } else if ($('.radio-business').is(':checked')) {
-                    window.checkoutConfig.invoiceData.ec_invoice_type = "company";
+                if (ecInvoiceType === 'private') {
+                    invoiceData.ec_invoice_type = "private";
+                } else if (ecInvoiceType === 'business') {
+                    invoiceData.ec_invoice_type = "company";
                 }
+                checkout.invoiceData = invoiceData;
             }
 
-            return (requiredValid && vatValid && cfValid && sdiValid);
+            return (isValid);
         }
     };
 });

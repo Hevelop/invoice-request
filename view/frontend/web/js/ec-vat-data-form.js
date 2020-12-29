@@ -8,25 +8,26 @@
 define([
     'jquery',
     'ko',
-    'uiComponent',
-    'Magento_Ui/js/lib/validation/validator',
-    'Magento_Checkout/js/model/payment/additional-validators'
+    'Magento_Ui/js/form/form'
 ],
-
-function ($, ko, Component, validator) {
+function ($, ko, Form) {
     'use strict';
 
-    return Component.extend({
+    return Form.extend({
         defaults: {
-            isVatDataFormVisible: ko.observable()
+            isVatDataFormVisible: ko.observable(),
+            childrenInputs: [
+                'ec_invoice_type',
+                'ec_company',
+                'ec_vat_id',
+                'ec_taxvat',
+                'ec_sdi_code'
+            ]
         },
 
         initialize: function () {
             this._super();
-
             this.isVatDataFormVisible(false);
-            // component initialization logic
-
             return this;
         }
     });

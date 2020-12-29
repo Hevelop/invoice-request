@@ -78,6 +78,8 @@ class CheckoutLayoutProcessor
             'config' => [
                 'customScope' => 'customInvoice',
                 'options' => [],
+                'template' => 'Hevelop_InvoiceRequest/ec-field',
+                'elementTmpl' => 'Hevelop_InvoiceRequest/ec-input',
                 'id' => 'ec_company_name'
             ],
             'dataScope' => 'customInvoice.ec_company',
@@ -100,6 +102,8 @@ class CheckoutLayoutProcessor
             'config' => [
                 'customScope' => 'customInvoice',
                 'options' => [],
+                'template' => 'Hevelop_InvoiceRequest/ec-field',
+                'elementTmpl' => 'Hevelop_InvoiceRequest/ec-input',
                 'id' => 'ec_vat_id'
             ],
             'dataScope' => 'customInvoice.ec_vat_id',
@@ -110,7 +114,8 @@ class CheckoutLayoutProcessor
             'additionalClasses' => 'ec_vat_id',
             'validation' => [
                 'required-entry' => false,
-                'max_text_length' => 255
+                'max_text_length' => 255,
+                'validateVatIta' => true
             ],
             'sortOrder' => 112,
             'id' => 'ec_vat_id'
@@ -122,6 +127,8 @@ class CheckoutLayoutProcessor
             'config' => [
                 'customScope' => 'customInvoice',
                 'options' => [],
+                'template' => 'Hevelop_InvoiceRequest/ec-field',
+                'elementTmpl' => 'Hevelop_InvoiceRequest/ec-input',
                 'id' => 'ec_fiscal_code'
             ],
             'dataScope' => 'customInvoice.ec_taxvat',
@@ -132,7 +139,8 @@ class CheckoutLayoutProcessor
             'additionalClasses' => 'ec_taxvat',
             'validation' => [
                 'required-entry' => false,
-                'max_text_length' => 255
+                'max_text_length' => 255,
+                'validateCf' => true
             ],
             'sortOrder' => 113,
             'id' => 'ec_taxvat'
@@ -144,6 +152,8 @@ class CheckoutLayoutProcessor
             'config' => [
                 'customScope' => 'customInvoice',
                 'options' => [],
+                'template' => 'Hevelop_InvoiceRequest/ec-field',
+                'elementTmpl' => 'Hevelop_InvoiceRequest/ec-input',
                 'id' => 'ec_sdi_code'
             ],
             'dataScope' => 'customInvoice.ec_sdi_code',
@@ -154,7 +164,8 @@ class CheckoutLayoutProcessor
             'additionalClasses' => 'ec_sdi_code',
             'validation' => [
                 'required-entry' => false,
-                'max_text_length' => 255
+                'max_text_length' => 255,
+                'validateSdi' => true
             ],
             'sortOrder' => 113,
             'id' => 'ec_sdi_code'

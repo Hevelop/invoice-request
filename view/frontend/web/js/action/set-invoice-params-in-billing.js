@@ -6,8 +6,9 @@
  * @package Hevelop_InvoiceRequest
  */
 define([
-    'Magento_Checkout/js/model/quote'
-], function (quote) {
+    'Magento_Checkout/js/model/quote',
+    'uiRegistry'
+], function (quote, registry) {
     'use strict';
 
     return function () {
@@ -17,35 +18,38 @@ define([
             billingAddress['extensionAttributes'] = {};
         }
 
-        // eslint-disable-next-line max-len
-        billingAddress['extensionAttributes']['ec_want_invoice'] = window.checkoutConfig.quoteData.ec_want_invoice;
+        let checkout = registry.get('checkout');
+        let invoiceData = checkout.invoiceData;
 
-        if (window.checkoutConfig.quoteData.ec_want_invoice === 1) {
-            if (window.checkoutConfig.invoiceData.ec_company !== '') {
-                // eslint-disable-next-line max-len
-                billingAddress['extensionAttributes']['ec_company'] = window.checkoutConfig.invoiceData.ec_company;
+        if (typeof invoiceData == 'undefined') {
+            invoiceData = {
+                ec_want_invoice: 0
+            };
+        }
+
+        billingAddress['extensionAttributes']['ec_want_invoice'] = invoiceData.ec_want_invoice;
+
+        if (invoiceData.ec_want_invoice === 1) {
+            if (invoiceData.ec_company !== '') {
+                billingAddress['extensionAttributes']['ec_company'] = invoiceData.ec_company;
             }
 
-            if (window.checkoutConfig.invoiceData.ec_vat_id !== '') {
-                // eslint-disable-next-line max-len
-                billingAddress['extensionAttributes']['ec_vat_id'] = window.checkoutConfig.invoiceData.ec_vat_id;
+            if (invoiceData.ec_vat_id !== '') {
+                billingAddress['extensionAttributes']['ec_vat_id'] = invoiceData.ec_vat_id;
             }
 
-            if (window.checkoutConfig.invoiceData.ec_taxvat !== '') {
-                // eslint-disable-next-line max-len
-                billingAddress['extensionAttributes']['ec_taxvat'] = window.checkoutConfig.invoiceData.ec_taxvat;
+            if (invoiceData.ec_taxvat !== '') {
+                billingAddress['extensionAttributes']['ec_taxvat'] = invoiceData.ec_taxvat;
             }
 
-            if (window.checkoutConfig.invoiceData.ec_sdi_code !== '') {
-                // eslint-disable-next-line max-len
-                billingAddress['extensionAttributes']['ec_sdi_code'] = window.checkoutConfig.invoiceData.ec_sdi_code;
+            if (invoiceData.ec_sdi_code !== '') {
+                billingAddress['extensionAttributes']['ec_sdi_code'] = invoiceData.ec_sdi_code;
             }
 
-            if (window.checkoutConfig.invoiceData.ec_invoice_type !== '') {
-                // eslint-disable-next-line max-len
-                billingAddress['extensionAttributes']['ec_invoice_type'] = window.checkoutConfig.invoiceData.ec_invoice_type;
+            if (invoiceData.ec_invoice_type !== '') {
+                billingAddress['extensionAttributes']['ec_invoice_type'] = invoiceData.ec_invoice_type;
             }
-            // eslint-disable-next-line max-len
+
         } else if (billingAddress['extensionAttributes'] && billingAddress['extensionAttributes']['ec_invoice_type']) {
             billingAddress['extensionAttributes'].splice('ec_invoice_type', 1);
         }

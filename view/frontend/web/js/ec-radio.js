@@ -8,28 +8,35 @@
 define([
     'Magento_Ui/js/form/element/abstract',
     'jquery',
+    'ko',
     'Hevelop_InvoiceRequest/js/ec-vat-data-form',
-    'Magento_Checkout/js/model/quote'
-], function (Abstract, $, vatForm, quote) {
+    'Magento_Checkout/js/model/quote',
+    'uiRegistry'
+], function (Abstract, $, ko, vatForm, quote, registry) {
     'use strict';
 
-    let vatInputs = '.payment-method div.ec-vat-data-form > .field';
-
     return Abstract.extend({
+        defaults: {
+            vatFormListComponent: registry.get('checkout.steps.billing-step.payment.payments-list.before-place-order.ec-vat-data-form'),
+            radioCheckValue: ko.observable('private'),
+            value: ko.observable()
+        },
         initialize: function () {
             this._super();
             let self = this;
+
+            this.radioCheckValue('private');
 
             vatForm().isVatDataFormVisible.subscribe(function (value) {
                 if (value) {
                     self.change('private');
                 } else {
-                    $(vatInputs).each(function (index, element) {
+                    let vatFormFields = self.vatFormListComponent.childrenInputs;
+                    vatFormFields.forEach(function (index) {
+                        let component = self.vatFormListComponent.getChild(index);
                         // eslint-disable-next-line max-len
-                        if ($(element).hasClass('ec_company') || $(element).hasClass('ec_vat_id') || $(element).hasClass('ec_taxvat')) {
-                            let eleInput = $(element).find('input.input-text');
-
-                            $(eleInput).val('');
+                        if (component.additionalClasses['ec_company'] || component.additionalClasses['ec_vat_id'] || component.additionalClasses['ec_taxvat']) {
+                            component.value('');
                         }
                     });
                 }
@@ -44,7 +51,6 @@ define([
         setChecked: function (data, event) {
             event.target.checked = true;
             this.change(event.target.value);
-            //return true;
         },
 
         /**
@@ -59,104 +65,91 @@ define([
         },
 
         setPrivateInputs: function () {
-            $(vatInputs).each(function (index, element) {
-                let ele = $(element),
-                    eleInput = ele.find('input.input-text'),
-                    eleLabel = ele.find('label');
-
-                $('.radio-private').prop('checked', true).attr('checked', 'checked');
-                $('.radio-business').prop('checked', false).removeAttr('checked');
+            let self = this;
+            let vatFormFields = this.vatFormListComponent.childrenInputs;
+            let taxvat = window.checkoutConfig.customerData.taxvat;
+            self.radioCheckValue('private');
+            vatFormFields.forEach(function (index) {
+                let component = self.vatFormListComponent.getChild(index);
+                let ele = $('.' + component.id);
 
                 let billingAddress = quote.billingAddress();
                 let country = billingAddress !== null ? billingAddress.countryId : 'IT';
 
-                if (window.checkoutConfig.customerData.taxvat !== null && ele.hasClass('ec_taxvat'))
-                    $(eleInput).val(window.checkoutConfig.customerData.taxvat);
+                if (taxvat !== null && component.additionalClasses['ec_taxvat']) {
+                    component.value(taxvat);
+                }
 
-                if (ele.hasClass('ec_company'))
-                    $(eleInput).val('');
+                if (component.additionalClasses['ec_company'] || component.additionalClasses['ec_vat_id'] || component.additionalClasses['ec_sdi_code']) {
+                    component.value('');
+                }
 
-                if (ele.hasClass('ec_vat_id'))
-                    $(eleInput).val('');
-
-                if (ele.hasClass('ec_sdi_code'))
-                    $(eleInput).val('');
-
-                $(eleInput).removeClass('ec-invalid-input');
-                $(eleInput).attr('aria-invalid', 'false');
-                $(eleInput).siblings('.ec-error').remove();
-
-                if (ele.hasClass('ec_company') || ele.hasClass('ec_vat_id') || ele.hasClass('ec_sdi_code')) {
-                    $(eleInput).prop('required', false);
-                    $(eleInput).removeClass('ec-required ec-sdi-validation ec-ita-vat-validation');
-                    $(eleInput).addClass('ec-not-required');
+                if (component.additionalClasses['ec_company'] || component.additionalClasses['ec_vat_id'] || component.additionalClasses['ec_sdi_code']) {
+                    component.required(false);
+                    component.validation['required-entry'] = false;
+                    component.visible(false);
                     ele.fadeOut('fast');
-                    $(eleLabel).find('sup').remove();
-                } else if (ele.hasClass('ec_taxvat')) {
-                    $(eleInput).addClass('ec-required');
-                    $(eleInput).removeClass('ec-not-required');
-                    $(eleInput).prop('required', true);
-                    $(eleLabel).find('sup').remove();
-                    $(eleLabel).append('<sup>*</sup>');
-
-                    if (country === 'IT')
-                        $(eleInput).addClass('ec-ita-cf-validation');
+                } else if (component.additionalClasses['ec_taxvat']) {
+                    component.required(true);
+                    component.validation['required-entry'] = true;
+                    if (country === 'IT') {
+                        component.validation['validateCf'] = true;
+                    } else {
+                        component.validation['validateCf'] = false;
+                    }
                 }
             });
         },
 
         setBusinessInputs: function () {
-            $(vatInputs).each(function (index, element) {
-                let ele = $(element),
-                    eleInput = ele.find('input.input-text'),
-                    eleLabel = ele.find('label');
-
-                $('.radio-business').prop('checked', true).attr('checked', 'checked');
-                $('.radio-private').prop('checked', false).removeAttr('checked');
+            let self = this;
+            let vatFormFields = this.vatFormListComponent.childrenInputs;
+            let taxvat = window.checkoutConfig.customerData.taxvat;
+            self.radioCheckValue('business');
+            vatFormFields.forEach(function (index) {
+                let component = self.vatFormListComponent.getChild(index),
+                    ele = $('.' + component.id);
 
                 let billingAddress = quote.billingAddress();
                 let country = billingAddress !== null ? billingAddress.countryId : 'IT';
 
-                // eslint-disable-next-line max-len
-                if (typeof billingAddress.company !== 'undefined' && billingAddress.company !== null && ele.hasClass('ec_company'))
-                    $(eleInput).val(billingAddress.company);
+                if (billingAddress !== null) {
 
-                // eslint-disable-next-line max-len
-                if (typeof billingAddress.vatId !== 'undefined' && billingAddress.vatId !== null && ele.hasClass('ec_vat_id'))
-                    $(eleInput).val(billingAddress.vatId);
+                    if (typeof billingAddress.company !== 'undefined' && billingAddress.company !== null && component.additionalClasses['ec_company']) {
+                        component.value(billingAddress.company);
+                    }
 
-                if (typeof billingAddress.customAttributes !== "undefined") {
-                    // eslint-disable-next-line max-len
-                    if (typeof billingAddress.customAttributes.sdi_code !== 'undefined' && billingAddress.customAttributes.sdi_code.value !== null && ele.hasClass('ec_sdi_code'))
-                        $(eleInput).val(billingAddress.customAttributes.sdi_code.value);
+                    if (typeof billingAddress.vatId !== 'undefined' && billingAddress.vatId !== null && component.additionalClasses['ec_vat_id']) {
+                        component.value(billingAddress.vatId);
+                    }
+
+                    if (typeof billingAddress.customAttributes !== "undefined") {
+                        if (typeof billingAddress.customAttributes.sdi_code !== 'undefined' && billingAddress.customAttributes.sdi_code.value !== null && component.additionalClasses['ec_sdi_code']) {
+                            component.value(billingAddress.customAttributes.sdi_code.value);
+                        }
+                    }
                 }
 
-                if (window.checkoutConfig.customerData.taxvat !== null && ele.hasClass('ec_taxvat'))
-                    $(eleInput).val(window.checkoutConfig.customerData.taxvat);
+                if (taxvat !== null && component.additionalClasses['ec_taxvat']) {
+                    component.value(taxvat);
+                }
 
-                $(eleInput).removeClass('ec-invalid-input');
-                $(eleInput).attr('aria-invalid', 'false');
-                $(eleInput).siblings('.ec-error').remove();
-
-                // eslint-disable-next-line max-len,no-extra-parens
-                if (ele.hasClass('ec_company') || ele.hasClass('ec_vat_id') || (country === 'IT' && ele.hasClass('ec_sdi_code'))) {
-                    $(eleInput).prop('required', true);
-                    $(eleInput).removeClass('ec-not-required');
-                    $(eleInput).addClass('ec-required');
+                if (component.additionalClasses['ec_company'] || component.additionalClasses['ec_vat_id'] || (country === 'IT' && component.additionalClasses['ec_sdi_code'])) {
+                    component.required(true);
+                    component.validation['required-entry'] = true;
+                    component.visible(true);
                     ele.fadeIn('fast');
-                    $(eleLabel).find('sup').remove();
-                    $(eleLabel).append('<sup>*</sup>');
-
-                    if (ele.hasClass('ec_sdi_code'))
-                        $(eleInput).addClass('ec-sdi-validation');
-
-                    if (country === 'IT' && ele.hasClass('ec_vat_id'))
-                        $(eleInput).addClass('ec-ita-vat-validation');
-                } else if (ele.hasClass('ec_taxvat')) {
-                    $(eleInput).prop('required', false);
-                    $(eleInput).removeClass('ec-required ec-ita-cf-validation');
-                    $(eleInput).addClass('ec-not-required');
-                    $(eleLabel).find('sup').remove();
+                    if (country === 'IT' && component.additionalClasses['ec_vat_id']) {
+                        component.validation['validateVatIta'] = true;
+                    } else {
+                        component.validation['validateVatIta'] = false;
+                    }
+                } else if (component.additionalClasses['ec_taxvat']) {
+                    component.required(false);
+                    component.validation['required-entry'] = false;
+                    component.error('');
+                    component.error.valueHasMutated();
+                    component.bubble('error', '');
                 }
             });
         }
