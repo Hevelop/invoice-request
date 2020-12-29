@@ -117,7 +117,7 @@ define([
                 let vatFormFields = vatFormListComponent.childrenInputs;
                 vatFormFields.forEach(function (index) {
                     let component = vatFormListComponent.getChild(index);
-                    if (component.required()) {
+                    if (component.required() || component.value() !== '') {
                         let validationResult = component.validate();
                         if (validationResult.valid === false) {
                             isValid = false;
