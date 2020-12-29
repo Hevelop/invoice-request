@@ -135,10 +135,8 @@ define([
                 }
 
                 if (component.additionalClasses['ec_company'] || component.additionalClasses['ec_vat_id'] || (country === 'IT' && component.additionalClasses['ec_sdi_code'])) {
-                    if (!component.additionalClasses['ec_company']) {
-                        component.required(true);
-                        component.validation['required-entry'] = true;
-                    }
+                    component.required(true);
+                    component.validation['required-entry'] = true;
                     component.visible(true);
                     ele.fadeIn('fast');
                     if (country === 'IT' && component.additionalClasses['ec_vat_id']) {
