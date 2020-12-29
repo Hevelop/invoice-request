@@ -10,10 +10,9 @@ define([
     'uiRegistry',
     'mageUtils',
     'Magento_Ui/js/lib/validation/validator',
-    'Hevelop_InvoiceRequest/js/ec-radio',
     'mage/validation',
     'mage/translate'
-], function ($, registry, utils, validator, ecRadio, validation, $t) {
+], function ($, registry, utils, validator, validation, $t) {
     'use strict';
 
     let vatFormListComponent = registry.get('checkout.steps.billing-step.payment.payments-list.before-place-order.ec-vat-data-form');
@@ -101,6 +100,7 @@ define([
 
             let checkoutProvider = registry.get('checkoutProvider');
             let invoiceRequest = checkoutProvider.invoiceRequest;
+            let ecInvoiceType = 'private';
 
             if (typeof invoiceRequest !== 'undefined' && invoiceRequest.ec_want_invoice === 1) {
 
@@ -127,12 +127,15 @@ define([
                             component.error('');
                         }
                     }
+                    if (index === 'ec_invoice_type') {
+                        ecInvoiceType = component.radioCheckValue();
+                    }
                     invoiceData[index] = component.value();
                 });
 
-                if (ecRadio.radioCheckValue === 'private') {
+                if (ecInvoiceType === 'private') {
                     invoiceData.ec_invoice_type = "private";
-                } else if (ecRadio.radioCheckValue === 'business') {
+                } else if (ecInvoiceType === 'business') {
                     invoiceData.ec_invoice_type = "company";
                 }
                 checkout.invoiceData = invoiceData;

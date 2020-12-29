@@ -11,9 +11,8 @@ define([
     'ko',
     'Hevelop_InvoiceRequest/js/ec-vat-data-form',
     'Magento_Checkout/js/model/quote',
-    'Magento_Customer/js/customer-data',
     'uiRegistry'
-], function (Abstract, $, ko, vatForm, quote, customerData, registry) {
+], function (Abstract, $, ko, vatForm, quote, registry) {
     'use strict';
 
     return Abstract.extend({
@@ -68,6 +67,7 @@ define([
         setPrivateInputs: function () {
             let self = this;
             let vatFormFields = this.vatFormListComponent.childrenInputs;
+            let taxvat = window.checkoutConfig.customerData.taxvat;
             self.radioCheckValue('private');
             vatFormFields.forEach(function (index) {
                 let component = self.vatFormListComponent.getChild(index);
@@ -76,8 +76,8 @@ define([
                 let billingAddress = quote.billingAddress();
                 let country = billingAddress !== null ? billingAddress.countryId : 'IT';
 
-                if (typeof customerData.get('customer')().taxvat !== 'undefined' && component.additionalClasses['ec_taxvat']) {
-                    component.value(customerData.get('customer')().taxvat);
+                if (taxvat !== null && component.additionalClasses['ec_taxvat']) {
+                    component.value(taxvat);
                 }
 
                 if (component.additionalClasses['ec_company'] || component.additionalClasses['ec_vat_id'] || component.additionalClasses['ec_sdi_code']) {
@@ -91,6 +91,7 @@ define([
                     ele.fadeOut('fast');
                 } else if (component.additionalClasses['ec_taxvat']) {
                     component.required(true);
+                    component.validation['required-entry'] = true;
                     if (country === 'IT') {
                         component.validation['validateCf'] = true;
                     } else {
@@ -103,10 +104,11 @@ define([
         setBusinessInputs: function () {
             let self = this;
             let vatFormFields = this.vatFormListComponent.childrenInputs;
+            let taxvat = window.checkoutConfig.customerData.taxvat;
             self.radioCheckValue('business');
             vatFormFields.forEach(function (index) {
-                let component = self.vatFormListComponent.getChild(index);
-                let ele = $('.' + component.id);
+                let component = self.vatFormListComponent.getChild(index),
+                    ele = $('.' + component.id);
 
                 let billingAddress = quote.billingAddress();
                 let country = billingAddress !== null ? billingAddress.countryId : 'IT';
@@ -128,8 +130,8 @@ define([
                     }
                 }
 
-                if (typeof customerData.get('customer')().taxvat !== 'undefined' && component.additionalClasses['ec_taxvat']) {
-                    component.value(customerData.get('customer')().taxvat);
+                if (taxvat !== null && component.additionalClasses['ec_taxvat']) {
+                    component.value(taxvat);
                 }
 
                 if (component.additionalClasses['ec_company'] || component.additionalClasses['ec_vat_id'] || (country === 'IT' && component.additionalClasses['ec_sdi_code'])) {
@@ -146,6 +148,10 @@ define([
                     }
                 } else if (component.additionalClasses['ec_taxvat']) {
                     component.required(false);
+                    component.validation['required-entry'] = false;
+                    component.error('');
+                    component.error.valueHasMutated();
+                    component.bubble('error', '');
                 }
             });
         }
