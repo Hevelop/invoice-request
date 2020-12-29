@@ -26,7 +26,7 @@ define([
             let c = 0;
 
             if (value.length <= 0)
-                return false;
+                return true;
 
             let piReg = /\d{11}/;
             if (!piReg.test(value))
@@ -57,6 +57,9 @@ define([
             let j;
             let s = 0;
 
+            if (value.length <= 0)
+                return true;
+
             value = value.toUpperCase();
 
             if (!cfReg.test(value)) {
@@ -84,6 +87,8 @@ define([
     validator.addRule(
         'validateSdi',
         function (value) {
+            if (value.length <= 0)
+                return true;
             let sdiReg = /^[a-zA-Z0-9]{7,}$/;
             return sdiReg.test(value);
         }
