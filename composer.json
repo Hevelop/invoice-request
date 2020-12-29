@@ -9,10 +9,10 @@
         }
     ],
     "require": {
-        "magento/module-backend": "^101.0.5",
-        "magento/module-sales": "^102.0.5",
-        "magento/module-quote": "^101.1.5",
-        "magento/module-checkout": "^100.3.5"
+        "magento/module-backend": "101.*||102.*",
+        "magento/module-sales": "102.*||103.*",
+        "magento/module-quote": "101.*",
+        "magento/module-checkout": "100.*"
     },
     "license": [
         "AGPL-3.0"
