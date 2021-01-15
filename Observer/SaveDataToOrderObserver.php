@@ -43,6 +43,8 @@ class SaveDataToOrderObserver implements ObserverInterface
         $order = $observer->getOrder();
         $quote = $this->checkoutSession->getQuote();
         $billingAddress = $quote->getBillingAddress();
+        // This is a mapping of the customer vatId and the Taxvat
+        $vatData = explode(",", $billingAddress->getVatId());
 
         $order->setEcWantInvoice($quote->getEcWantInvoice());
 
@@ -54,12 +56,12 @@ class SaveDataToOrderObserver implements ObserverInterface
             foreach ($addresses as $address) {
                 if ($address->getAddressType() == 'billing') {
                     $address->setCompany($billingAddress->getCompany());
-                    $address->setVatId($billingAddress->getVatId());
+                    $address->setVatId($vatData[0]);
                     $address->setSdiCode($billingAddress->getSdiCode());
                 }
             }
 
-            $order->setCustomerTaxvat($billingAddress->getExtensionAttributes()->getEcTaxvat());
+            $order->setCustomerTaxvat($vatData[1]);
         }
 
         return $this;

@@ -50,19 +50,22 @@ class PaymentInformationManagement
         if (!empty($extAttributes)) {
             $quote = $this->quoteRepository->getActive($cartId);
             $quote->setEcWantInvoice($extAttributes->getEcWantInvoice());
+            // This is a mapping of the customer vatId and the Taxvat
+            $vatData = array(
+                $extAttributes->getEcVatId(),
+                $extAttributes->getEcTaxvat()
+            );
 
             if ($extAttributes->getEcWantInvoice() == "1") {
                 $quote->setEcInvoiceType($extAttributes->getEcInvoiceType());
                 $billingAddress->setCompany($extAttributes->getEcCompany());
-                $billingAddress->setVatId($extAttributes->getEcVatId());
+                $billingAddress->setVatId(implode(",", $vatData));
                 $billingAddress->setSdiCode($extAttributes->getEcSdiCode());
-                $quote->setCustomerTaxvat($extAttributes->getEcTaxvat());
             } else {
                 $quote->setEcInvoiceType("");
                 $billingAddress->setCompany("");
                 $billingAddress->setVatId("");
                 $billingAddress->setSdiCode("");
-                $quote->setCustomerTaxvat("");
             }
         }
     }
