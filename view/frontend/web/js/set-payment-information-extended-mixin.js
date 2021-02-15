@@ -11,8 +11,8 @@ define([
 ], function (wrapper, saveBillingAction) {
     'use strict';
 
-    return function (setPaymentInformationAction) {
-        return wrapper.wrap(setPaymentInformationAction, function (originalAction) {
+    return function (setPaymentInformationExtendedAction) {
+        return wrapper.wrap(setPaymentInformationExtendedAction, function (originalAction) {
             saveBillingAction();
             return originalAction();
         });
