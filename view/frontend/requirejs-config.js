@@ -11,8 +11,8 @@ var config = {
             'Magento_Checkout/js/action/place-order': {
                 'Hevelop_InvoiceRequest/js/place-order-mixin': true
             },
-            'Magento_Checkout/js/action/set-payment-information': {
-                'Hevelop_InvoiceRequest/js/set-payment-information-mixin': true
+            'Magento_Checkout/js/action/set-payment-information-extended': {
+                'Hevelop_InvoiceRequest/js/set-payment-information-extended-mixin': true
             }
         }
     }
