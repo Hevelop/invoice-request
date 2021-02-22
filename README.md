@@ -98,6 +98,9 @@ Ex.:
 ### Translations
 The module has i18n transaltions for italian, french and spanish languages.
 
+### Stripe
+- Compatible with stripe/module-payments 2.5
+
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -178,3 +181,6 @@ Es.:
 
 ### Traduzioni
 Le voci sono in inglese, sono inserite le traduzioni per italiano, francese e spagnolo.
+
+### Stripe
+- Compatibile con stripe/module-payments 2.5

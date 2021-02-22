@@ -13,6 +13,9 @@ var config = {
             },
             'Magento_Checkout/js/action/set-payment-information-extended': {
                 'Hevelop_InvoiceRequest/js/set-payment-information-extended-mixin': true
+            },
+            'StripeIntegration_Payments/js/view/payment/method-renderer/stripe_payments': {
+                'Hevelop_InvoiceRequest/js/stripe-payments-mixin': true
             }
         }
     }
