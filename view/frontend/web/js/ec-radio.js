@@ -11,8 +11,9 @@ define([
     'ko',
     'Hevelop_InvoiceRequest/js/ec-vat-data-form',
     'Magento_Checkout/js/model/quote',
-    'uiRegistry'
-], function (Abstract, $, ko, vatForm, quote, registry) {
+    'uiRegistry',
+    'Magento_Ui/js/lib/validation/validator'
+], function (Abstract, $, ko, vatForm, quote, registry, validator) {
     'use strict';
 
     return Abstract.extend({
@@ -152,6 +153,26 @@ define([
                     component.bubble('error', '');
                 }
             });
+        },
+
+        validate: function () {
+            var value = this.value(),
+                result = validator(this.validation, value, this.validationParams),
+                message = !this.disabled() && this.visible() ? result.message : '',
+                isValid = this.disabled() || !this.visible() || result.passed;
+
+            this.error(message);
+            this.error.valueHasMutated();
+            this.bubble('error', message);
+
+            if (this.source && !isValid) {
+                this.source.set('params.invalid', true);
+            }
+
+            return {
+                valid: isValid,
+                target: this
+            };
         }
     });
 });

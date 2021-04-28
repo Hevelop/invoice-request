@@ -8,8 +8,9 @@
 define([
     'Magento_Ui/js/form/element/abstract',
     'jquery',
-    'ko'
-], function (Abstract, $, ko) {
+    'ko',
+    'Magento_Ui/js/lib/validation/validator'
+], function (Abstract, $, ko, validator) {
     'use strict';
 
     return Abstract.extend({
@@ -29,6 +30,26 @@ define([
                     paymentMethodRenderer.item.method : '';
             }
             return (paymentMethodName ? paymentMethodName + '_' : '') + this.uid;
+        },
+
+        validate: function () {
+            var value = this.value(),
+                result = validator(this.validation, value, this.validationParams),
+                message = !this.disabled() && this.visible() ? result.message : '',
+                isValid = this.disabled() || !this.visible() || result.passed;
+
+            this.error(message);
+            this.error.valueHasMutated();
+            this.bubble('error', message);
+
+            if (this.source && !isValid) {
+                this.source.set('params.invalid', true);
+            }
+
+            return {
+                valid: isValid,
+                target: this
+            };
         }
     });
 });
