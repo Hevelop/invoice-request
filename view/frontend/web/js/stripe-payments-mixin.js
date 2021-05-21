@@ -24,6 +24,7 @@ define([
 
             let checkoutProvider = registry.get('checkoutProvider');
             let invoiceRequest = checkoutProvider.invoiceRequest;
+            let ecInvoiceType = 'private';
             let ecWantInvoice = typeof invoiceRequest !== "undefined" ? invoiceRequest.ec_want_invoice : false;
 
             let invoiceData = {
