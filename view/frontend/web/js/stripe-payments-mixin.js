@@ -22,6 +22,7 @@ define([
 
             let vatFormListComponent = registry.get('checkout.steps.billing-step.payment.payments-list.before-place-order.ec-vat-data-form');
 
+            let checkout = registry.get('checkout');
             let checkoutProvider = registry.get('checkoutProvider');
             let invoiceRequest = checkoutProvider.invoiceRequest;
             let ecInvoiceType = 'private';
@@ -56,6 +57,7 @@ define([
                 invoiceData[index] = component.value();
             });
 
+            checkout.invoiceData = invoiceData;
 
             return (isValid);
         }
