@@ -54,8 +54,13 @@ class GuestPaymentInformationManagement
         $cartId,
         $email,
         PaymentInterface $paymentMethod,
-        AddressInterface $billingAddress
+        AddressInterface $billingAddress = null
     ) {
+
+        if($billingAddress === null){
+            return;
+        }
+
         $extAttributes = $billingAddress->getExtensionAttributes();
 
         if (!empty($extAttributes)) {

@@ -43,8 +43,13 @@ class PaymentInformationManagement
         Subject $subject,
         $cartId,
         PaymentInterface $paymentMethod,
-        AddressInterface $billingAddress
+        AddressInterface $billingAddress = null
     ) {
+
+        if($billingAddress === null){
+            return;
+        }
+
         $extAttributes = $billingAddress->getExtensionAttributes();
 
         if (!empty($extAttributes)) {
